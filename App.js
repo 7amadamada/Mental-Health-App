@@ -1,15 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { 
+  StyleSheet,
+   Text,
+    View,
+    TouchableHighlight,
+    Alert,
+    Image, 
+    SafeAreaView,
+    Button,
+  } from 'react-native';
 
 export default function App() {
   console.log('App component is rendering' );
+  console.log(require('./assets/icon.png'));
 
   
   return (
-    <View style={styles.container}>
-      <Text>Hello, welcome to Radiant</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Button 
+      color={"purple"}
+      title= "button"
+       onPress={() =>
+        Alert.prompt("my title", "my message", (text) => console.log(text))
+       }/>
+    </SafeAreaView>
   );
 }
 
