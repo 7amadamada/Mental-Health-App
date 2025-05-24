@@ -7,7 +7,7 @@ import{
     TouchableOpacity,
     SafeAreaView,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FeatureCard = ({ title, icon, onPress }) => (
     <TouchableOpacity style={styles.featureCard} onPress={onPress}>
@@ -171,4 +171,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen;
+export {HomeScreen};

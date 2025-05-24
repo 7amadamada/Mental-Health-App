@@ -1,40 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { 
-  StyleSheet,
-   Text,
-    View,
-    TouchableHighlight,
-    Alert,
-    Image, 
-    SafeAreaView,
-    Button,
-    NavigationContainer,
-    createStackNavigator,
-    SafeAreaProvider,
-  } from 'react-native';
+import React from 'react';
+import {NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function App() {
-  console.log('App component is rendering' );
-  console.log(require('./assets/icon.png'));
+import {HomeScreen} from './radiant-backend/app/screens/HomeScreen.js';
 
-  
+const Stack = createNativeStackNavigator();
+
+const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Button 
-      color={"purple"}
-      title= "button"
-       onPress={() =>
-        Alert.prompt("my title", "my message", (text) => console.log(text))
-       }/>
-    </SafeAreaView>
-  );
-}
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>);
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+export default App;
