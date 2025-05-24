@@ -8,6 +8,9 @@ import {
     Image, 
     SafeAreaView,
     Button,
+    NavigationContainer,
+    createStackNavigator,
+    SafeAreaProvider,
   } from 'react-native';
 
 export default function App() {
