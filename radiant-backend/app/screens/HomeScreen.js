@@ -55,6 +55,11 @@ const HomeScreen = ({ navigation }) => {
                         icon="emoticon-outline" 
                         onPress={() => navigation.navigate('MoodTracker')} 
                     />
+                    <FeatureCard
+                        title="Meditation"
+                        icon="meditation"
+                        onPress={() => navigation.navigate('Meditation')}
+                    />
                     <FeatureCard 
                         title="Fitness Log" 
                         icon="run" 

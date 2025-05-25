@@ -1,7 +1,7 @@
-const User = require('./users');
-const Meditation = require('./meditation');
-const Mood = require('./mood');
-const Journal = require('./journal');
+const User = require('./Users');
+const Meditation = require('./Meditation');
+const Mood = require('./Mood');
+const Journal = require('./Journal');
 const fitness = require('./fitness');
 
 module.exports = {

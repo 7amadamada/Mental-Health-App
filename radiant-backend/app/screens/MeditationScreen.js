@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export {MeditationScreen};
+export default MeditationScreen;
