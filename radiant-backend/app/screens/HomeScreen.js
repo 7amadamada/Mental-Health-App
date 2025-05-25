@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import{
     View,
     Text,
@@ -6,6 +6,7 @@ import{
     ScrollView,
     TouchableOpacity,
     SafeAreaView,
+    Dimensions
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -17,11 +18,37 @@ const FeatureCard = ({ title, icon, onPress }) => (
 );
 
 const HomeScreen = ({ navigation }) => {
+  const [dimensions, setDimensions] = useState(Dimensions.get('window'));
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      setDimensions(window);
+    });
+    return () => subscription?.remove();
+  }, []);
+
+  const cardWidth = (dimensions.width - 60) / 3;
     const today = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
         day: 'numeric',
     });
+
+    const dynamicStyles = {
+        card: {
+            width: cardWidth,
+            backgroundColor: '#fff',
+            borderRadius: 10,
+            padding: 12,
+            alignItems: 'center',
+            shadowColor: '#000',
+            marginBottom: 15,
+            shadowOffset: {width: 0, height: 1},
+            shadowOpacity: 0.2,
+            shadowRadius: 1.41,
+            elevation: 2
+        },
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -29,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={styles.Greeting}>Hello, user!</Text>
                 <Text style={styles.date}>{today}</Text>
             </View>
-
+        <ScrollView>
             <View style={styles.dailyTip}>
                 <Text style={styles.tipTitle}>Daily Wellness Tip</Text>
                 <Text style={styles.tipText}>
@@ -48,40 +75,25 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             <Text style={styles.sectionTitle}>Features</Text>
-            <ScrollView>
-                <View Style = {styles.featuresGrid}>
-                    <FeatureCard 
-                        title="Mood Tracker" 
-                        icon="emoticon-outline" 
-                        onPress={() => navigation.navigate('MoodTracker')} 
-                    />
-                    <FeatureCard
-                        title="Meditation"
-                        icon="meditation"
-                        onPress={() => navigation.navigate('Meditation')}
-                    />
-                    <FeatureCard 
-                        title="Fitness Log" 
-                        icon="run" 
-                        onPress={() => navigation.navigate('FitnessLog')} 
-                    />
-                    <FeatureCard 
-                        title="Journal" 
-                        icon="note" 
-                        onPress={() => navigation.navigate('Journal')} 
-                    />
-                    <FeatureCard 
-                        title="Talk to a Professional" 
-                        icon="message-text-outline" 
-                        onPress={() => navigation.navigate('TalkToProfessional')} 
-                    />
-                    <FeatureCard 
-                        title="Profile" 
-                        icon="account-outline" 
-                        onPress={() => navigation.navigate('Profile')}
-                    />
-                    </View>
-            </ScrollView>
+            <View style={styles.featuresGrid}>
+                {[
+            { title: "Mood Tracker", icon: "emoticon-outline", screen: "MoodTracker" },
+            { title: "Meditation", icon: "meditation", screen: "Meditation" },
+            { title: "Fitness", icon: "run", screen: "FitnessTracker" },
+            { title: "Journal", icon: "book-outline", screen: "Journal" },
+            { title: "Talk to Pro", icon: "message-text-outline", screen: "TalkToPro" },
+            { title: "Profile", icon: "account-outline", screen: "Profile" }
+          ].map((feature, index) => (
+            <FeatureCard
+              key={index}
+              title={feature.title}
+              icon={feature.icon}
+              onPress={() => navigation.navigate(feature.screen)}
+              style={{ width: cardWidth }}
+            />
+          ))}
+        </View>
+        </ScrollView>
 
             </SafeAreaView>
     );
