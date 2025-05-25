@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import {HomeScreen} from './radiant-backend/app/screens/HomeScreen.js';
 import {LoginScreen} from './radiant-backend/app/screens/LoginScreen.js';
+import {MeditationScreen} from './radiant-backend/app/screens/MeditationScreen.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ const App = () => {
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Meditation" component={MeditationScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>);
