@@ -3,7 +3,7 @@ import {NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import {HomeScreen} from './radiant-backend/app/screens/HomeScreen.js';
+import HomeScreen from './radiant-backend/app/screens/HomeScreen.js';
 import {LoginScreen} from './radiant-backend/app/screens/LoginScreen.js';
 import {SignupScreen} from './radiant-backend/app/screens/SignupScreen.js';
 import ChangePasswordScreen from './radiant-backend/app/screens/ChangePasswordScreen.js';
