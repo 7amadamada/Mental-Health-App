@@ -9,6 +9,7 @@ import {SignupScreen} from './radiant-backend/app/screens/SignupScreen.js';
 import MeditationScreen from './radiant-backend/app/screens/MeditationScreen.js';
 import  JournalScreen  from './radiant-backend/app/screens/JournalScreen.js';
 import MoodTrackerScreen from './radiant-backend/app/screens/MoodTrackerScreen.js';
+import FitnessTrackerScreen from './radiant-backend/app/screens/FitnessTrackerScreen.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const App = () => {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Meditation" component={MeditationScreen} />
           <Stack.Screen name="MoodTracker" component={MoodTrackerScreen} />
+          <Stack.Screen name="FitnessTracker" component={FitnessTrackerScreen} />
           <Stack.Screen name="Journal" component={JournalScreen} />
         </Stack.Navigator>
       </NavigationContainer>
