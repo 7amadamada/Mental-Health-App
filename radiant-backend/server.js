@@ -4,11 +4,34 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const app = express();
+require('dotenv').config();
 
-app.use(cors());
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const meditationRoutes = require('./routes/meditation');
+const moodRoutes = require('./routes/mood');
+const fitnessRoutes = require('./routes/fitness');
+const journalRoutes = require('./routes/journal');
+const professionalRoutes = require('./routes/professional');
+
+const App = express();
+
+app.use(cors({
+    origin: '*',
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
+}));
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('dev'));
+
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/meditation', meditationRoutes);
+app.use('/api/mood', moodRoutes);
+app.use('/api/fitness', fitnessRoutes);
+app.use('/api/journal', journalRoutes);
+app.use('/api/professional', professionalRoutes);
 
 mongoose.connect('mongodb://127.0.0.1:27017/radiant')
     .then(() => console.log('Connected to MongoDB'))
@@ -35,7 +58,7 @@ app.get('/', (req, res) => {
     res.send('Radiant API is running');
     });
 
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
