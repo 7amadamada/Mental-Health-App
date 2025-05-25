@@ -18,7 +18,7 @@ import axios from 'axios';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'https://localhost:3000/api/signup';
+const API_URL = 'https://localhost:5000/api';
 
 const SignupScreen = ({ navigation }) => {
     const [name, setName] = useState('');
