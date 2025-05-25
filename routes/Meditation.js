@@ -23,7 +23,7 @@ const MeditationSchema = new mongoose.Schema({
         enum: ['stress', 'sleep', 'focus', 'anxiety', 'gratitude', 'other'],
     },
     imageUrl: {
-        type:string,
+        type:String,
     },
     popularity: {
         type: Number,

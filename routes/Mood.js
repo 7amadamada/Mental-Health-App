@@ -1,3 +1,5 @@
+const express = require('express');
+const router = express.Router();
 const mongoose = require('mongoose');
 
 const MoodSchema = new mongoose.Schema({
@@ -33,4 +35,17 @@ const MoodSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 MoodSchema.index({ user: 1, date: -1 });
-module.exports = mongoose.model('Mood', MoodSchema);
+
+const Mood = mongoose.models.Mood || mongoose.model('Mood', MoodSchema);
+
+router.get('/', async (req, res) => {
+    try {
+        const moods = await Mood.find();
+        res.json(moods);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+module.exports = router;

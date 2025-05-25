@@ -2,7 +2,6 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../config';
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
   }
 });
 
-// Add a request interceptor to add auth token to requests
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('token');
@@ -24,23 +22,18 @@ api.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle errors
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // Handle session expiration
     if (error.response && error.response.status === 401) {
-      // Clear token and redirect to login
       AsyncStorage.removeItem('token');
-      // Navigation would be handled by the component
     }
     return Promise.reject(error);
   }
 );
 
-// Auth services
 export const authService = {
   login: async (email, password) => {
     const response = await api.post('/api/auth/login', { email, password });
@@ -64,7 +57,6 @@ export const authService = {
   }
 };
 
-// Meditation services
 export const meditationService = {
   getAllMeditations: async () => {
     const response = await api.get('/api/meditations');
@@ -77,7 +69,6 @@ export const meditationService = {
   }
 };
 
-// Mood services
 export const moodService = {
   getAllMoods: async () => {
     const response = await api.get('/api/moods');
@@ -95,7 +86,6 @@ export const moodService = {
   }
 };
 
-// Journal services
 export const journalService = {
   getAllJournals: async () => {
     const response = await api.get('/api/journals');
@@ -123,7 +113,6 @@ export const journalService = {
   }
 };
 
-// Fitness services
 export const fitnessService = {
   getAllActivities: async () => {
     const response = await api.get('/api/fitness');

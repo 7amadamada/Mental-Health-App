@@ -6,14 +6,12 @@ const morgan = require('morgan');
 const app = express();
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
-const meditationRoutes = require('./routes/Meditation');
-const moodRoutes = require('./routes/Mood');
-const fitnessRoutes = require('./routes/Fitness');
-const journalRoutes = require('./routes/Journal');
-const professionalRoutes = require('./routes/Professional');
-
+// Add a check to verify the MongoDB URI is defined
+if (!process.env.MONGODB_URI) {
+  console.error('MONGODB_URI environment variable is not defined');
+  console.error('Please create a .env file with your MongoDB connection string');
+  process.exit(1);
+}
 
 app.use(cors({
     origin: '*',
@@ -24,13 +22,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan('dev'));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/meditation', meditationRoutes);
-app.use('/api/Mood', moodRoutes);
-app.use('/api/Fitness', fitnessRoutes);
-app.use('/api/Journal', journalRoutes);
-app.use('/api/Professional', professionalRoutes);
+
 
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -42,10 +34,10 @@ mongoose.connect(process.env.MONGODB_URI, {
         console.error('Error connecting to MongoDB:', err);
         process.exit(1);
     });
-const moodSchema = new mongoose.Schema({
 
-mood: { type: String,required: true},
-date: { type: Date, default: Date.now}
+    const moodSchema = new mongoose.Schema({
+  mood: { type: String, required: true },
+  date: { type: Date, default: Date.now }
 });
 
 const mood = mongoose.model('Mood', moodSchema);

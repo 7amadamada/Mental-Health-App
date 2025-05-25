@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
         minlength: 6
     },
     isAnonymous: {
-        type: boolean,
+        type: Boolean,
         default: false 
     },
     dateJoined: {
