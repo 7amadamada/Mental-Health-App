@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 const JournalScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');

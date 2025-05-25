@@ -13,7 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'https://loclahost:5000/api';
+const API_URL = 'https://loclahost:3000/api';
 
 const ChangePasswordScreen = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState('');

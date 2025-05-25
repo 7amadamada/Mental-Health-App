@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 const MoodTrackerScreen = ({ navigation }) => {
   const [selectedMood, setSelectedMood] = useState(null);
