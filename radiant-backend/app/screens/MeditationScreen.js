@@ -18,7 +18,6 @@ const MEDITATIONS = [
         description: 'Start your day with positivity and mindfulness.',
         duration: 5,
         category: 'focus',
-        image: require('../assets/morning_meditation.jpg'),
     },
     {
         id: '2',
@@ -26,7 +25,6 @@ const MEDITATIONS = [
         description: 'Unwind and relax after a long day.',
         duration: 10,
         category: 'relaxation',
-        image: require('../assets/evening_relaxation.jpg'),
     },
     {
         id: '3',
@@ -34,7 +32,6 @@ const MEDITATIONS = [
         description: 'Find peace and calm in stressful times.',
         duration: 15,
         category: 'stress',
-        image: require('../assets/stress_relief.jpg'),
     }
 ];
 
@@ -44,7 +41,7 @@ const MeditationCard = ({ item, onPress }) => (
       <Image 
         source={{ uri: item.imageUrl }} 
         style={styles.cardImage}
-        defaultSource={require('../assets/default-meditation.png')}
+        defaultSource={require('C:/Users/misut/OneDrive/Documents/GitHub/Mental-Health-App/Radiant/radiant-backend/app/assets/default_meditation.png')}
       />
       <View style={styles.durationBadge}>
         <Text style={styles.durationText}>{item.duration} min</Text>
