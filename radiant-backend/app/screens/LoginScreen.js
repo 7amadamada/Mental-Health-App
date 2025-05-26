@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -24,14 +24,77 @@ const LoginScreen = ({ navigation }) => {
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = () => {
-        navigation.navigate('Home');
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert('Error', 'Please enter email and password');
+            return;
+        }
+        
+        try {
+            setIsLoading(true);
+            const response = await axios.post(`${API_URL}/api/auth/login`, {
+                email,
+                password
+            });
+            
+            const { token, user } = response.data;
+            
+            await AsyncStorage.setItem('token', token);
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+            });
+        } catch (error) {
+            console.error('Login error:', error);
+            let errorMessage = 'Login failed';
+            
+            if (error.response) {
+                errorMessage = error.response.data.message || errorMessage;
+            }
+            
+            Alert.alert('Error', errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleAnonymousLogin = () => {
         setIsAnonymous(true);
         navigation.navigate('Home');
     };
+
+    useEffect(() => {
+        const testApiConnection = async () => {
+            try {
+                const testUrl = `${API_URL}/api/test`;
+                console.log('Testing API connection to:', testUrl);
+                
+                // Use plain fetch with a timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
+                const response = await fetch(testUrl, {
+                    method: 'GET',
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('API test response:', data);
+                } else {
+                    console.error('API test failed with status:', response.status);
+                }
+            } catch (error) {
+                console.error('API test error:', error.message);
+            }
+        };
+        
+        testApiConnection();
+    }, []);
 
     return (
         <KeyboardAvoidingView

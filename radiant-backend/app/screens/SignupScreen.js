@@ -42,114 +42,113 @@ const SignupScreen = ({ navigation }) => {
             return;
         }
 
-
         try {
             setIsLoading(true);
-            const response = await axios.post(API_URL, {
+            // Fix the API endpoint for signup
+            const response = await axios.post(`${API_URL}/api/auth/register`, {
                 name,
                 email,
                 password,
             });
 
             const { token, user } = response.data;
-      
-      await AsyncStorage.setItem('token', token);
-      await AsyncStorage.setItem('user', JSON.stringify(user));
-      
+            
+            await AsyncStorage.setItem('token', token);
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+            });
+        } catch (error) {
+            console.error('Signup error:', error);
+            let errorMessage = 'Registration failed';
+            
+            if (error.response) {
+                errorMessage = error.response.data.message || errorMessage;
+            }
+            
+            Alert.alert('Error', errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Home' }],
-      });
-    } catch (error) {
-      console.error('Signup error:', error);
-      let errorMessage = 'Registration failed';
-      
-      if (error.response) {
-        errorMessage = error.response.data.message || errorMessage;
-      }
-      
-      Alert.alert('Error', errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+        >
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.logoContainer}>
+                    <Image
+                        source={require('../assets/logo.png')}
+                        style={styles.logo}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.appName}>Radiant</Text>
+                    <Text style={styles.tagline}>Create Your Wellness Account</Text>
+                </View>
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Text style={styles.appName}>Radiant</Text>
-          <Text style={styles.tagline}>Create Your Wellness Account</Text>
-        </View>
+                <View style={styles.formContainer}>
+                    <Text style={styles.label}>Name</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your full name"
+                        value={name}
+                        onChangeText={setName}
+                    />
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your full name"
-            value={name}
-            onChangeText={setName}
-          />
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your email"
+                        value={email}
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
 
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Create a password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
 
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Create a password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+                    <Text style={styles.label}>Confirm Password</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Confirm your password"
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry
+                    />
 
-          <Text style={styles.label}>Confirm Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm your password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
+                    <TouchableOpacity
+                        style={styles.signupButton}
+                        onPress={handleSignup}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <ActivityIndicator color="white" />
+                        ) : (
+                            <Text style={styles.signupButtonText}>Create Account</Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
 
-          <TouchableOpacity
-            style={styles.signupButton}
-            onPress={handleSignup}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text style={styles.signupButtonText}>Create Account</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.loginLink}>Login</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
+                <View style={styles.loginContainer}>
+                    <Text style={styles.loginText}>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                        <Text style={styles.loginLink}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
+    );
 };
 
 const styles = StyleSheet.create({

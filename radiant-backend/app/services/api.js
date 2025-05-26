@@ -2,15 +2,20 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../config';
 
+console.log('Initializing API with baseURL:', API_URL);
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 15000 
 });
 
 api.interceptors.request.use(
   async (config) => {
+    console.log(`API Request: ${config.method.toUpperCase()} ${config.baseURL}${config.url}`);
+    
     const token = await AsyncStorage.getItem('token');
     if (token) {
       config.headers['x-auth-token'] = token;
@@ -18,18 +23,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      AsyncStorage.removeItem('token');
-    }
+    console.error('API Request Error:', error);
     return Promise.reject(error);
   }
 );
@@ -45,27 +39,6 @@ export const authService = {
     const response = await api.post('/api/auth/register', { name, email, password });
     await AsyncStorage.setItem('token', response.data.token);
     return response.data;
-  },
-  
-  logout: async () => {
-    await AsyncStorage.removeItem('token');
-  },
-  
-  isAuthenticated: async () => {
-    const token = await AsyncStorage.getItem('token');
-    return !!token;
-  }
-};
-
-export const meditationService = {
-  getAllMeditations: async () => {
-    const response = await api.get('/api/meditations');
-    return response.data;
-  },
-  
-  getMeditationById: async (id) => {
-    const response = await api.get(`/api/meditations/${id}`);
-    return response.data;
   }
 };
 
@@ -78,38 +51,6 @@ export const moodService = {
   createMood: async (moodData) => {
     const response = await api.post('/api/moods', moodData);
     return response.data;
-  },
-  
-  getMoodStats: async (period) => {
-    const response = await api.get(`/api/moods/stats?period=${period}`);
-    return response.data;
-  }
-};
-
-export const journalService = {
-  getAllJournals: async () => {
-    const response = await api.get('/api/journals');
-    return response.data;
-  },
-  
-  createJournal: async (journalData) => {
-    const response = await api.post('/api/journals', journalData);
-    return response.data;
-  },
-  
-  getJournalById: async (id) => {
-    const response = await api.get(`/api/journals/${id}`);
-    return response.data;
-  },
-  
-  updateJournal: async (id, journalData) => {
-    const response = await api.put(`/api/journals/${id}`, journalData);
-    return response.data;
-  },
-  
-  deleteJournal: async (id) => {
-    const response = await api.delete(`/api/journals/${id}`);
-    return response.data;
   }
 };
 
@@ -121,6 +62,30 @@ export const fitnessService = {
   
   createActivity: async (activityData) => {
     const response = await api.post('/api/fitness', activityData);
+    return response.data;
+  }
+};
+
+export const journalService = {
+  getAllEntries: async () => {
+    const response = await api.get('/api/journals');
+    return response.data;
+  },
+  
+  createEntry: async (journalData) => {
+    const response = await api.post('/api/journals', journalData);
+    return response.data;
+  }
+};
+
+export const userService = {
+  getProfile: async () => {
+    const response = await api.get('/api/users/me');
+    return response.data;
+  },
+  
+  updateProfile: async (userData) => {
+    const response = await api.put('/api/users/me', userData);
     return response.data;
   }
 };

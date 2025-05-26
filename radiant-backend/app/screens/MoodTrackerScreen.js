@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { API_URL } from '../config';
 
@@ -39,8 +40,8 @@ const MoodTrackerScreen = ({ navigation }) => {
 
   const fetchMoodHistory = async () => {
     try {
-      const token = await getToken();
-      const response = await axios.get(`${API_URL}/moods`, {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/api/moods`, {
         headers: { 'x-auth-token': token }
       });
       setMoodHistory(response.data);
@@ -65,7 +66,7 @@ const MoodTrackerScreen = ({ navigation }) => {
     }
 
     try {
-      const token = await getToken();
+      const token = await AsyncStorage.getItem('token');
       const moodData = {
         mood: selectedMood,
         intensity,
@@ -73,7 +74,7 @@ const MoodTrackerScreen = ({ navigation }) => {
         factors: selectedFactors
       };
 
-      await axios.post(`${API_URL}/moods`, moodData, {
+      await axios.post(`${API_URL}/api/moods`, moodData, {
         headers: { 'x-auth-token': token }
       });
 
@@ -91,10 +92,6 @@ const MoodTrackerScreen = ({ navigation }) => {
     setIntensity(3);
     setNotes('');
     setSelectedFactors([]);
-  };
-
-  const getToken = async () => {
-    return 'your-auth-token';
   };
 
   return (

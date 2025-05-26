@@ -13,7 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'https://loclahost:3000/api';
+import { API_URL } from '../config';
 
 const ChangePasswordScreen = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -22,45 +22,40 @@ const ChangePasswordScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChangePassword = async () => {
-    // Validate inputs
     if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert('Error', 'All fields are required');
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-
+    
     if (newPassword !== confirmPassword) {
       Alert.alert('Error', 'New passwords do not match');
       return;
     }
-
+    
     if (newPassword.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
+      Alert.alert('Error', 'Password must be at least 6 characters long');
       return;
     }
-
+    
     try {
       setIsLoading(true);
       const token = await AsyncStorage.getItem('token');
       
-      await axios.put(
-        `${API_URL}/users/password`,
-        {
-          currentPassword,
-          newPassword
-        },
-        {
-          headers: { 'x-auth-token': token }
-        }
-      );
-
+      await axios.post(`${API_URL}/api/auth/change-password`, {
+        currentPassword,
+        newPassword
+      }, {
+        headers: { 'x-auth-token': token }
+      });
+      
       Alert.alert('Success', 'Password changed successfully', [
         { text: 'OK', onPress: () => navigation.goBack() }
       ]);
     } catch (error) {
-      console.error('Error changing password:', error);
+      console.error('Change password error:', error);
       let errorMessage = 'Failed to change password';
       
-      if (error.response && error.response.data) {
+      if (error.response) {
         errorMessage = error.response.data.message || errorMessage;
       }
       
