@@ -9,6 +9,8 @@ import{
     Dimensions
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import { API_URL } from '../config';
 
 const FeatureCard = ({ title, icon, onPress }) => (
     <TouchableOpacity style={styles.featureCard} onPress={onPress}>
@@ -49,6 +51,40 @@ const HomeScreen = ({ navigation }) => {
             elevation: 2
         },
     };
+
+    useEffect(() => {
+      const testApiConnection = async () => {
+        try {
+          console.log('Testing API connection to:', `${API_URL}/api/test`);
+          
+          // Use axios with a longer timeout
+          const response = await axios.get(`${API_URL}/api/test`, {
+            timeout: 10000 // 10 seconds
+          });
+          
+          console.log('API test successful:', response.data);
+        } catch (error) {
+          console.error('API test error:', error.message);
+          
+          try {
+            console.log('Trying fetch as fallback...');
+            const fetchResponse = await fetch(`${API_URL}/api/test`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+            });
+            const data = await fetchResponse.json();
+            console.log('Fetch API test successful:', data);
+          } catch (fetchError) {
+            console.error('Fetch API test error:', fetchError.message);
+          }
+        }
+      };
+      
+      testApiConnection();
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>

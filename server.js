@@ -147,5 +147,6 @@ app.get('/api/test', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log(`Try accessing at http://localhost:${PORT}/api/test`);
+    console.log(`Server IP: ${require('os').networkInterfaces()['Wi-Fi']?.[0]?.address || '172.20.10.1'}`);
+    console.log(`Try accessing at http://172.20.10.1:${PORT}/api/test`);
     });
